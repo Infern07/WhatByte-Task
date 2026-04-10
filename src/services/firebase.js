@@ -14,7 +14,7 @@ import { getFirestore } from 'firebase/firestore';
 
 // TODO: Replace with your Firebase web app config
 const firebaseConfig = {
-  apiKey: "AIzaSyBrUC9St5ojZYstWs5gW3sTGspjO3aYfPk",
+  apiKey: process.env.EXPO_PUBLIC_API_KEY,
   authDomain: "whatbyte-task.firebaseapp.com",
   projectId: "whatbyte-task",
   storageBucket: "whatbyte-task.firebasestorage.app",
