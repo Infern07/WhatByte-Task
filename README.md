@@ -29,20 +29,15 @@ A simple React Native app for gig workers to manage tasks with **Firebase Authen
 1. Open **Project settings** (gear) → **Your apps** → add a **Web** app if you don’t have one.
 2. Copy the `firebaseConfig` object values.
 
-### Update this project
+### Update this project (API key in `.env`)
 
-Open [`src/services/firebase.js`](src/services/firebase.js) and replace the placeholder `firebaseConfig` with your real values:
+The **Web API key** is read from a root `.env` file (loaded by [`app.config.js`](app.config.js) and passed into the app via `expo-constants`). Other Firebase fields stay in [`src/services/firebase.js`](src/services/firebase.js).
 
-```js
-const firebaseConfig = {
-  apiKey: '...',
-  authDomain: '...',
-  projectId: '...',
-  storageBucket: '...',
-  messagingSenderId: '...',
-  appId: '...',
-};
-```
+1. Copy [`.env.example`](.env.example) to `.env` in the project root.
+2. Set `EXPO_PUBLIC_API_KEY` to the **apiKey** from Firebase → **Project settings** → **Your apps** → Web app (same project as `projectId` in `firebase.js`).
+3. After any `.env` change, restart Metro with a clean cache: `npx expo start -c`
+
+**Note:** `EXPO_PUBLIC_*` values are still embedded in the client bundle (that is normal for Firebase Web keys). The `.env` file mainly keeps keys out of source control—`.env` is listed in `.gitignore`.
 
 ### Firestore security rules (recommended)
 

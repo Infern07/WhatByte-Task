@@ -1,6 +1,6 @@
 /**
  * Firebase initialization and auth helpers.
- * Replace firebaseConfig with values from your Firebase project (Project settings → General).
+ * API key: use `.env` → EXPO_PUBLIC_API_KEY (injected via app.config.js → extra).
  */
 import { initializeApp, getApps } from 'firebase/app';
 import {
@@ -11,17 +11,39 @@ import {
   sendPasswordResetEmail,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import Constants from 'expo-constants';
 
-// TODO: Replace with your Firebase web app config
+/**
+ * Web API key from env (see `.env` and `app.config.js`).
+ * Falls back to process.env for edge tooling.
+ */
+function getFirebaseApiKey() {
+  const fromExpo = Constants.expoConfig?.extra?.firebaseApiKey;
+  const raw =
+    (typeof fromExpo === 'string' && fromExpo.length > 0
+      ? fromExpo
+      : process.env.EXPO_PUBLIC_API_KEY) || '';
+  return raw.trim();
+}
+
+const apiKey = getFirebaseApiKey();
+
 const firebaseConfig = {
-  apiKey: process.env.EXPO_PUBLIC_API_KEY,
-  authDomain: "whatbyte-task.firebaseapp.com",
-  projectId: "whatbyte-task",
-  storageBucket: "whatbyte-task.firebasestorage.app",
-  messagingSenderId: "233636536113",
-  appId: "1:233636536113:web:eabdc6bdb8a2287ecf1a10",
-  measurementId: "G-NGBYZL2GF8"
+  apiKey,
+  authDomain: 'whatbyte-task.firebaseapp.com',
+  projectId: 'whatbyte-task',
+  storageBucket: 'whatbyte-task.firebasestorage.app',
+  messagingSenderId: '233636536113',
+  appId: '1:233636536113:web:eabdc6bdb8a2287ecf1a10',
+  measurementId: 'G-NGBYZL2GF8',
 };
+
+if (__DEV__ && !apiKey) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    '[Firebase] Missing EXPO_PUBLIC_API_KEY. Add it to `.env`, restart Metro with: npx expo start -c'
+  );
+}
 
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 
